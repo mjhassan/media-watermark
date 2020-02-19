@@ -18,6 +18,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var player: AVPlayer! = nil
     var playerLayer: AVPlayerLayer! = nil
     
+    enum ActionType {
+        case watermark, merge
+    }
+    
+    private var type: ActionType!
+    
     // MARK: - view controller lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,20 +40,26 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     // MARK: - actions
     @IBAction func openMediaButtonDidTap(_ sender: Any) {
+        type = .watermark
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    @IBAction func openMediaForMerge(_ sender: Any) {
+        type = .merge
         present(imagePickerController, animated: true, completion: nil)
     }
     
     // MARK: - UIImagePickerControllerDelegate
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let mediaType = info[UIImagePickerControllerMediaType] as! String
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let mediaType = info[.mediaType] as! String
         picker.dismiss(animated: true, completion: nil)
         
         if (mediaType == kUTTypeVideo as String) || (mediaType == kUTTypeMovie as String) {
-            let videoUrl = info[UIImagePickerControllerMediaURL] as! URL
-            processVideo(url: videoUrl)
+            let videoUrl = info[.mediaURL] as! URL
+            type == .watermark ? watermarkVideo(url: videoUrl):mergeVideo(url: videoUrl)
         } else {
-            let image = info[UIImagePickerControllerOriginalImage] as? UIImage
-            processImage(image: image!)
+            let image = info[.originalImage] as? UIImage
+            watermarkImage(image: image!)
         }
     }
     
@@ -56,7 +68,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     // MARK: - processing
-    func processImage(image: UIImage) {
+    func watermarkImage(image: UIImage) {
         playerLayer?.removeFromSuperlayer()
 
         resultImageView.image = nil
@@ -80,7 +92,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
-    func processVideo(url: URL) {
+    func watermarkVideo(url: URL) {
         resultImageView.image = nil
         
         if let item = MediaItem(url: url) {
@@ -99,6 +111,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 DispatchQueue.main.async {
                     self?.playVideo(url: result.processedUrl!, view: (self?.resultImageView)!)
                 }
+            }
+        }
+    }
+    
+    func mergeVideo(url: URL) {
+        AVMutableComposition().mergeVideo([url, url]) { [weak self] url, error in
+            DispatchQueue.main.async {
+                self?.playVideo(url: url!, view: (self?.resultImageView)!)
             }
         }
     }
