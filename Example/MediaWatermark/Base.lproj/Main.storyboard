@@ -45,21 +45,28 @@
                                     <action selector="openMediaForMerge:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Yc6-nc-fSI"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="ldX-xF-F3v">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                                <color key="color" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="OWr-Da-juo" secondAttribute="trailing" id="5il-p3-3mc"/>
                             <constraint firstItem="OWr-Da-juo" firstAttribute="top" secondItem="F7Z-hr-MSQ" secondAttribute="bottom" constant="8" id="L5t-xt-Ctp"/>
+                            <constraint firstItem="ldX-xF-F3v" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Mgg-At-JsP"/>
                             <constraint firstItem="F7Z-hr-MSQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Z0Z-fY-3u8"/>
                             <constraint firstItem="cSn-Wk-sbx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ZC2-FX-t1o"/>
                             <constraint firstItem="OWr-Da-juo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="fTf-Ve-vQN"/>
                             <constraint firstItem="cSn-Wk-sbx" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="tno-h0-Xcm"/>
                             <constraint firstAttribute="trailing" secondItem="F7Z-hr-MSQ" secondAttribute="trailing" id="uwL-eO-rHq"/>
+                            <constraint firstItem="ldX-xF-F3v" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="whm-Zq-lPd"/>
                             <constraint firstAttribute="trailing" secondItem="cSn-Wk-sbx" secondAttribute="trailing" id="yYu-cD-8XQ"/>
                             <constraint firstItem="F7Z-hr-MSQ" firstAttribute="top" secondItem="cSn-Wk-sbx" secondAttribute="bottom" constant="15" id="zNo-Ro-mlP"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="progress" destination="ldX-xF-F3v" id="5n5-Fe-vhC"/>
                         <outlet property="resultImageView" destination="F7Z-hr-MSQ" id="nW0-oH-rz1"/>
                     </connections>
                 </viewController>

@@ -13,6 +13,7 @@ import AVFoundation
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var resultImageView: UIImageView!
+    @IBOutlet weak var progress: UIActivityIndicatorView!
     
     var imagePickerController: UIImagePickerController! = nil
     var player: AVPlayer! = nil
@@ -116,9 +117,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func mergeVideo(url: URL) {
-        AVMutableComposition().mergeVideo([url, url]) { [weak self] url, error in
+        progress.isHidden = false
+        
+        NativeEditor.vStack(urls: [url, url]) { [weak self] result in
+            guard let _ws = self else { return }
             DispatchQueue.main.async {
-                self?.playVideo(url: url!, view: (self?.resultImageView)!)
+                _ws.progress.isHidden = true
+                
+                switch result {
+                case .success(let url):
+                    _ws.playVideo(url: url, view: _ws.resultImageView)
+                case .failure(let error):
+                    print(error)
+                }
             }
         }
     }
